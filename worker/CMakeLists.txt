@@ -12,8 +12,6 @@ add_executable(worker
         include/FileScraper/IFileIgnorer.h
 )
 
-set(CMAKE_PREFIX_PATH "C:/vcpkg/installed/x64-windows")
-
 target_compile_features(worker PRIVATE cxx_std_17)
 
 find_package(Crow CONFIG REQUIRED)
