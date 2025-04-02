@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
 #include "../DTO/FileDTO.h"
 #include "IFileScraper.h"
 #include "IFileIgnorer.h"

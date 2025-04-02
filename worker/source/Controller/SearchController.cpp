@@ -1,4 +1,6 @@
 #include "../../include/Controller/SearchController.h"
+#include <filesystem>
+#include <algorithm>
 
 void SearchController::registerRoutes(crow::App<crow::CORSHandler>& app)
 {
@@ -10,10 +12,12 @@ void SearchController::registerRoutes(crow::App<crow::CORSHandler>& app)
                     return crow::response(400, "Invalid JSON");
                 }
 
-                std::string searchPath = body["searchPath"].s();
+                std::string searchPathStr = body["searchPath"].s();
+                std::filesystem::path searchPath(searchPathStr);
+
                 std::string filter = body["filter"].s();
 
-                std::vector<FileDTO> results = fileScraper->getFilesRecursively(searchArea, filter);
+                std::vector<FileDTO> results = fileScraper->getFilesRecursively(searchPath, filter);
 
                 crow::json::wvalue resJson;
                 resJson["results"] = crow::json::wvalue(crow::json::type::List);
