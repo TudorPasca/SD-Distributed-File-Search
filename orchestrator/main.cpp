@@ -28,8 +28,8 @@ int main() {
     std::signal(SIGINT, handleShutdown);
 
     std::vector<WorkerConfig> workerConfigs = {
-            WorkerConfig(18081, "D:\\Tudor\\School\\SD\\test2"),
-            WorkerConfig(18082, "C:\\test")
+            WorkerConfig(18081, "C:\\test"),
+            WorkerConfig(18082, "D:\\Tudor\\School")
     };
     std::string workerExecutable = (std::filesystem::current_path() / "worker.exe").string();
     try {
