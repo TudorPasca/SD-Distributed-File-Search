@@ -15,7 +15,7 @@ public:
     const std::string& getAbsolutePath() const;
     const bool isFolder() const;
     const std::string& getContents() const;
-    crow::json::wvalue to_json() const;
+    crow::json::wvalue toJson() const;
 private:
     std::string name;
     std::string absolutePath;
