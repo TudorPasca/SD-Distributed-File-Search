@@ -14,6 +14,4 @@ public:
     void registerRoutes(crow::App<crow::CORSHandler> &app);
 private:
     std::shared_ptr<FileScraper> fileScraper;
-
-    static crow::json::wvalue fileDTOToJson(const FileDTO& fileDto);
 };

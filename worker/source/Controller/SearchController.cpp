@@ -24,18 +24,9 @@ void SearchController::registerRoutes(crow::App<crow::CORSHandler>& app)
                 int index = 0;
                 for (const auto& file : results)
                 {
-                    resJson["results"][index++] = fileDTOToJson(file);
+                    resJson["results"][index++] = file.toJson();
                 }
 
                 return crow::response{resJson};
             });
-}
-
-crow::json::wvalue SearchController::fileDTOToJson(const FileDTO &file) {
-    crow::json::wvalue obj;
-    obj["filename"] = file.getName();
-    obj["contents"] = file.getContents();
-    obj["path"] = file.getAbsolutePath();
-    obj["isFolder"] = file.isFolder();
-    return obj;
 }
