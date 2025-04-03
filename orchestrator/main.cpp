@@ -1,35 +1,36 @@
 #include <boost/process.hpp>
 #include <iostream>
-#include "./include/WorkerConfig.h"
+#include "include/Config/WorkerConfig.h"
+#include "include/Controller/SearchController.h"
 #include <vector>
 #include <filesystem>
 #include <csignal>
+#include <crow.h>
+#include <crow/middlewares/cors.h>
 
 namespace bp = boost::process;
 
 std::vector<bp::child> workers;
+crow::App<crow::CORSHandler> app;
 
 void handleShutdown(int signal) {
-    std::cout << "\n[Orchestrator] Terminating workers...\n";
     for (auto &worker : workers) {
         if (worker.running()) {
             worker.terminate();
             worker.wait();
         }
     }
-    std::cout << "[Orchestrator] All workers terminated. Exiting.\n";
-    std::exit(0);
+    app.stop();
 }
 
 int main() {
-    std::vector<WorkerConfig> workerConfigs = {
-            WorkerConfig(18081, "C:/test")
-    };
-
-    std::string workerExecutable = (std::filesystem::current_path() / "worker.exe").string();
-
     std::signal(SIGINT, handleShutdown);
 
+    std::vector<WorkerConfig> workerConfigs = {
+            WorkerConfig(18081, "D:\\Tudor\\School\\SD\\test2"),
+            WorkerConfig(18082, "C:\\test")
+    };
+    std::string workerExecutable = (std::filesystem::current_path() / "worker.exe").string();
     try {
         for (const auto& config : workerConfigs) {
             workers.emplace_back(workerExecutable, std::to_string(config.port),
@@ -39,14 +40,22 @@ int main() {
                       << " with search path " << config.searchPath << std::endl;
         }
         std::cout << "[Orchestrator] Press STOP button to kill workers...\n";
-        while (true) {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
     }
     catch (const std::exception &ex) {
         std::cerr << "[Orchestrator] Error launching worker process: " << ex.what() << std::endl;
         return 1;
     }
+
+    auto &cors = app.get_middleware<crow::CORSHandler>();
+    cors.global()
+            .origin("http://localhost:4200")
+            .allow_credentials()
+            .methods("POST"_method, "GET"_method);
+
+    SearchController searchController(workerConfigs);
+    searchController.registerRoutes(app);
+
+    app.port(18080).multithreaded().run();
 
     return 0;
 }
