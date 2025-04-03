@@ -20,6 +20,13 @@ FileDTO::FileDTO(const std::filesystem::directory_entry &entry) {
     }
 }
 
+FileDTO::FileDTO(const crow::json::rvalue &json) {
+    name = json["name"].s();
+    absolutePath = json["absolutePath"].s();
+    folder = json["folder"].b();
+    contents = json["contents"].s();
+}
+
 const std::string& FileDTO::getName() const { return name; }
 
 const std::string& FileDTO::getAbsolutePath() const { return absolutePath; }
@@ -27,3 +34,12 @@ const std::string& FileDTO::getAbsolutePath() const { return absolutePath; }
 const bool FileDTO::isFolder() const { return folder; }
 
 const std::string& FileDTO::getContents() const { return contents; }
+
+crow::json::wvalue FileDTO::to_json() const {
+    crow::json::wvalue json;
+    json["name"] = name;
+    json["absolutePath"] = absolutePath;
+    json["folder"] = folder;
+    json["contents"] = contents;
+    return json;
+}
