@@ -1,4 +1,9 @@
-add_executable(orchestrator main.cpp)
+add_executable(orchestrator main.cpp
+        include/Config/WorkerConfig.h
+        include/Controller/SearchController.h
+        source/Controller/SearchController.cpp
+
+)
 
 add_dependencies(orchestrator worker)
 
@@ -20,5 +25,8 @@ target_link_libraries(orchestrator PRIVATE Boost::process)
 
 find_package(Crow CONFIG REQUIRED)
 target_link_libraries(orchestrator PRIVATE Crow::Crow asio::asio)
+
+find_package(cpr CONFIG REQUIRED)
+target_link_libraries(orchestrator PRIVATE cpr::cpr)
 
 target_compile_features(orchestrator PRIVATE cxx_std_17)
