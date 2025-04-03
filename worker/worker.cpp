@@ -26,12 +26,6 @@ int main(int argc, char *argv[]) {
     auto searchController = std::make_shared<SearchController>(fileScraper);
 
     crow::App<crow::CORSHandler> app;
-    auto &cors = app.get_middleware<crow::CORSHandler>();
-    cors.global()
-            .origin("http://localhost:4200")
-            .allow_credentials()
-            .methods("POST"_method, "GET"_method);
-
     searchController->registerRoutes(app);
 
     app.port(port).multithreaded().run();
