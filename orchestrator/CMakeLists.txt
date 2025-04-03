@@ -18,8 +18,10 @@ add_custom_command(TARGET orchestrator POST_BUILD
         $<TARGET_FILE_DIR:orchestrator>
 )
 
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_STATIC_RUNTIME ON)
+target_sources(orchestrator PRIVATE ../worker/source/DTO/FileDTO.cpp)
+
+#set(Boost_USE_STATIC_LIBS ON)
+#set(Boost_USE_STATIC_RUNTIME ON)
 
 find_package(Boost REQUIRED COMPONENTS process)
 target_link_libraries(orchestrator PRIVATE Boost::process)

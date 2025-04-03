@@ -1,7 +1,8 @@
-#include <boost/process.hpp>
-#include <iostream>
 #include "include/Config/WorkerConfig.h"
 #include "include/Controller/SearchController.h"
+#include "include/Cache/LRUCache.h"
+#include <boost/process.hpp>
+#include <iostream>
 #include <vector>
 #include <filesystem>
 #include <csignal>
@@ -52,7 +53,10 @@ int main() {
             .allow_credentials()
             .methods("POST"_method, "GET"_method);
 
-    SearchController searchController(workerConfigs);
+    const size_t CACHE_SIZE = 3;
+    std::shared_ptr<ICache<std::string, std::vector<FileDTO>>> cache =
+            std::make_shared<LRUCache<std::string, std::vector<FileDTO>>>(CACHE_SIZE);
+    SearchController searchController(workerConfigs, cache);
     searchController.registerRoutes(app);
 
     app.port(18080).multithreaded().run();
