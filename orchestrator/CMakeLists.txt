@@ -2,7 +2,8 @@ add_executable(orchestrator main.cpp
         include/Config/WorkerConfig.h
         include/Controller/SearchController.h
         source/Controller/SearchController.cpp
-
+        include/Cache/ICache.h
+        include/Cache/LRUCache.h
 )
 
 add_dependencies(orchestrator worker)
