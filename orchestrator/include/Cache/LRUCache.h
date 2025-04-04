@@ -21,10 +21,6 @@ public:
         keyList.push_front(key);
         keyToPosition[key] = keyList.begin();
         entries[key] = value;
-        std::cout << "INSERT: ";
-        for (auto k: keyList)
-            std::cout << k << ' ';
-        std::cout << '\n';
     }
 
     Value get(const Key &key) override {
@@ -34,10 +30,6 @@ public:
         keyList.erase(it);
         keyList.push_front(key);
         keyToPosition[key] = keyList.begin();
-        std::cout << "GET: ";
-        for (auto k: keyList)
-            std::cout << k << ' ';
-        std::cout << '\n';
         return entries[key];
     }
 
